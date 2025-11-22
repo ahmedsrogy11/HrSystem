@@ -5,6 +5,7 @@ using HrSystem.Application.Loans.Abstractions;
 using HrSystem.Application.OrganizationLevels.Abstractions;
 using HrSystem.Application.Overtime.Abstractions;
 using HrSystem.Application.Shifts.Abstractions;
+using HrSystem.Application.SupportTickets.Abstractions;
 using HrSystem.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -40,6 +41,7 @@ namespace HrSystem.Infrastructure.Persistence
             services.AddScoped<IOvertimeRequestRepository, OvertimeRequestRepository>();
             services.AddScoped<IShiftRepository, ShiftRepository>();
             services.AddScoped<IShiftAssignmentRepository, ShiftAssignmentRepository>();
+            services.AddScoped<ISupportTicketRepository, SupportTicketRepository>();
 
 
 
