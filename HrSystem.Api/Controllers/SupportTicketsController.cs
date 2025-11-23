@@ -46,11 +46,11 @@ namespace HrSystem.Api.Controllers
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 20)
         {
-            var result = await _mediator
+            var (items, total) = await _mediator
                 .Send(new ListSupportTicketsQuery(employeeId, status, category, page, pageSize));
 
-            return Ok(result);
-
+            // Assuming result contains properties Total and Items
+            return Ok(new { total, items });
         }
 
 

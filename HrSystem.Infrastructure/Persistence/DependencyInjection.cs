@@ -1,4 +1,5 @@
-﻿using HrSystem.Application.Attendance.Abstractions;
+﻿using HrSystem.Application.Announcements.Abstractions;
+using HrSystem.Application.Attendance.Abstractions;
 using HrSystem.Application.Employees.Abstractions;
 using HrSystem.Application.Leaves.Abstractions;
 using HrSystem.Application.Loans.Abstractions;
@@ -42,6 +43,10 @@ namespace HrSystem.Infrastructure.Persistence
             services.AddScoped<IShiftRepository, ShiftRepository>();
             services.AddScoped<IShiftAssignmentRepository, ShiftAssignmentRepository>();
             services.AddScoped<ISupportTicketRepository, SupportTicketRepository>();
+            services.AddScoped<IAnnouncementRepository, AnnouncementRepository>();
+
+
+
 
 
 
