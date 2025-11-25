@@ -5,6 +5,7 @@ using HrSystem.Application.Leaves.Abstractions;
 using HrSystem.Application.Loans.Abstractions;
 using HrSystem.Application.OrganizationLevels.Abstractions;
 using HrSystem.Application.Overtime.Abstractions;
+using HrSystem.Application.Payroll.Abstractions;
 using HrSystem.Application.Shifts.Abstractions;
 using HrSystem.Application.SupportTickets.Abstractions;
 using HrSystem.Infrastructure.Repositories;
@@ -44,6 +45,9 @@ namespace HrSystem.Infrastructure.Persistence
             services.AddScoped<IShiftAssignmentRepository, ShiftAssignmentRepository>();
             services.AddScoped<ISupportTicketRepository, SupportTicketRepository>();
             services.AddScoped<IAnnouncementRepository, AnnouncementRepository>();
+            services.AddScoped<IPayrollPeriodRepository, PayrollPeriodRepository>();
+            services.AddScoped<IPayslipRepository, PayslipRepository>();
+
 
 
 
