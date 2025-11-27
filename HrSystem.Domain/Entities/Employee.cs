@@ -27,6 +27,13 @@ namespace HrSystem.Domain.Entities
         public string SalaryCurrency { get; set; } = "EGP";
 
 
+        // 👇 جديدة للـ Auth
+        public bool IsActive { get; set; } = true;
+
+        public byte[]? PasswordHash { get; set; }
+        public byte[]? PasswordSalt { get; set; }
+
+
         // الربط التنظيمي
         public Guid? OrganizationId { get; set; }
         public Organization? Organization { get; set; }

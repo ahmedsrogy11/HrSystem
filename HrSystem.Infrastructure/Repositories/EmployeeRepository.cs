@@ -36,6 +36,14 @@ namespace HrSystem.Infrastructure.Repositories
 
         }
 
+        public async Task<Employee?> GetByEmailAsync(string email, CancellationToken ct)
+        {
+            return await _db.Employees
+                .Where(e => !e.IsDeleted && e.IsActive && e.Email.ToLower() == email.ToLower())
+                .FirstOrDefaultAsync(ct);
+
+        }
+
         public async Task<Employee?> GetByIdAsync(Guid id, CancellationToken ct)
         {
            return await _db.Employees.FirstOrDefaultAsync(e => e.Id == id, ct);

@@ -4,6 +4,9 @@ using HrSystem.Application.Common.Behaviors;
 using HrSystem.Infrastructure.Persistence;
 using MediatR;
 using System.Reflection;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace HrSystem.Api
 {
@@ -36,6 +39,40 @@ namespace HrSystem.Api
             // ✅ هنا يستدعي DependencyInjection.AddInfrastructure ويقرأ ConnectionStrings:Default
             builder.Services.AddInfrastructure(builder.Configuration);
 
+
+            // إعدادات JWT Authentication
+            var jwtSection = builder.Configuration.GetSection("Jwt");
+            var jwtKey = jwtSection["Key"]!;
+            var jwtIssuer = jwtSection["Issuer"];
+            var jwtAudience = jwtSection["Audience"];
+            
+
+
+            builder.Services
+                .AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = jwtIssuer,
+                        ValidAudience = jwtAudience,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+                    };
+                });
+
+            builder.Services.AddAuthorization();
+
+
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -47,6 +84,7 @@ namespace HrSystem.Api
             app.UseValidationExceptionMiddleware();
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
 

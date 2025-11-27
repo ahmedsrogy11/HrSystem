@@ -19,6 +19,8 @@ namespace HrSystem.Application.Employees.Abstractions
         Task AddAsync(Employee employee, CancellationToken ct);
         Task UpdateAsync(Employee employee, CancellationToken ct);
         Task DeleteAsync(Guid id, CancellationToken ct);
+
+        Task<Employee?> GetByEmailAsync(string email, CancellationToken ct);
     }
 
 }

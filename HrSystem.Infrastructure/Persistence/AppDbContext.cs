@@ -1,4 +1,7 @@
 ﻿using HrSystem.Domain.Entities;
+using HrSystem.Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace HrSystem.Infrastructure.Persistence
 {
-     public class AppDbContext:DbContext
+    public class AppDbContext : IdentityDbContext<AppUser, IdentityRole<Guid>, Guid>
      {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -51,6 +54,29 @@ namespace HrSystem.Infrastructure.Persistence
 
             // 👇 تطبيق جميع ملفات التكوين (Configurations) تلقائيًا
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+
+            // تقدر تضيف config خاص بـ AppUser لو حبيت:
+            modelBuilder.Entity<AppUser>(b =>
+            {
+                b.ToTable("Users"); // اسم جدول اليوزرز بدل AspNetUsers
+
+                b.HasOne(u => u.Employee)
+                 .WithMany() // أو WithOne(...) لو عملت navigation في Employee
+                 .HasForeignKey(u => u.EmployeeId)
+                 .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // اختيارياً تغيير أسماء جداول Identity الافتراضية:
+            modelBuilder.Entity<IdentityRole<Guid>>().ToTable("UserRoles");
+            modelBuilder.Entity<IdentityUserRole<Guid>>().ToTable("UserRoleJoins");
+            modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("UserClaims");
+            modelBuilder.Entity<IdentityUserLogin<Guid>>().ToTable("UserLogins");
+            modelBuilder.Entity<IdentityRoleClaim<Guid>>().ToTable("RoleClaims");
+            modelBuilder.Entity<IdentityUserToken<Guid>>().ToTable("UserTokens");
+        
+
+
 
 
             // Global Query Filter (exclude soft deleted records)

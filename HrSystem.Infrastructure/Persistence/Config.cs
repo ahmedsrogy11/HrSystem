@@ -105,8 +105,16 @@ namespace HrSystem.Infrastructure.Persistence
             b.Property(x => x.LastName).HasMaxLength(100).IsRequired();
             b.Property(x => x.NationalId).HasMaxLength(20).IsRequired();
             b.Property(x => x.JobTitle).HasMaxLength(120).IsRequired();
+            b.Property(x => x.Email).HasMaxLength(200);
+
+            // 💰 إضافة الدقة للراتب الأساسي
+            b.Property(x => x.BaseSalary).HasPrecision(18, 2);
+
 
             b.HasIndex(x => x.NationalId).IsUnique();
+
+            // لو حاب تخلي الإيميل إجباري للدخول:
+            b.HasIndex(x => x.Email).IsUnique();
 
             // ربطات اختيارية للفلترة
             b.HasOne(x => x.Organization).WithMany().HasForeignKey(x => x.OrganizationId).OnDelete(DeleteBehavior.SetNull);
@@ -194,6 +202,10 @@ namespace HrSystem.Infrastructure.Persistence
         {
             b.ToTable("Payslips");
             b.HasKey(x => x.Id);
+            // 💰 إضافة الدقة لخصائص الحسابات في Payslip
+            b.Property(x => x.GrossEarnings).HasPrecision(18, 2);
+            b.Property(x => x.NetPay).HasPrecision(18, 2);
+            b.Property(x => x.TotalDeductions).HasPrecision(18, 2);
 
             b.HasOne(x => x.Employee)
              .WithMany(e => e.Payslips)
@@ -219,6 +231,8 @@ namespace HrSystem.Infrastructure.Persistence
         {
             b.ToTable("PayslipEarnings");
             b.HasKey(x => x.Id);
+            // 💰 إضافة الدقة لمبلغ الاستحقاق
+            b.Property(x => x.Amount).HasPrecision(18, 2);
         }
     }
 
@@ -229,6 +243,9 @@ namespace HrSystem.Infrastructure.Persistence
         {
             b.ToTable("PayslipDeductions");
             b.HasKey(x => x.Id);
+            // 💰 إضافة الدقة لمبلغ الاستقطاع
+            b.Property(x => x.Amount).HasPrecision(18, 2);
+
         }
     }
 
@@ -304,6 +321,8 @@ namespace HrSystem.Infrastructure.Persistence
         {
             b.ToTable("LoanRequests");
             b.HasKey(x => x.Id);
+            // 💰 إضافة الدقة لمبلغ القرض
+            b.Property(x => x.Amount).HasPrecision(18, 2);
 
             b.HasOne(x => x.Employee)
              .WithMany(e => e.LoanRequests)
@@ -324,6 +343,8 @@ namespace HrSystem.Infrastructure.Persistence
         {
             b.ToTable("OvertimeRequests");
             b.HasKey(x => x.Id);
+            // ⏱️ إضافة الدقة للساعات الإضافية
+            b.Property(x => x.Hours).HasPrecision(10, 4);
 
             b.HasOne(x => x.Employee)
              .WithMany(e => e.OvertimeRequests)

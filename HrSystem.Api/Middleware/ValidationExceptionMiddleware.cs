@@ -41,6 +41,16 @@ namespace HrSystem.Api.Middleware
                 await context.Response.WriteAsync(System.Text.Json.JsonSerializer.Serialize(payload));
 
 
+
+                if (ex.Message.Contains("Invalid email or password"))
+                {
+                    context.Response.StatusCode = (int)HttpStatusCode.Unauthorized; // أو 400
+                                                                                    // منع إظهار مسار الخطأ
+                    await context.Response.WriteAsync("{\"error\": \"Invalid email or password.\"}");
+                    return;
+                }
+
+
             }
         }
     }
